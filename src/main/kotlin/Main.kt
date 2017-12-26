@@ -1,4 +1,7 @@
+import model.Model
+import view.MainWindow
 
 fun main(args: Array<String>) {
-    print("Hello World")
+    val model = Model()
+    MainWindow.createAndInit(model)
 }
