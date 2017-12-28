@@ -1,5 +1,6 @@
 package view
 
+import main.kotlin.controller.PlaceSearcherListener
 import model.Model
 import java.awt.BorderLayout
 import java.awt.Component
@@ -13,13 +14,21 @@ import java.text.NumberFormat
 
 
 class OptionsPanelFactory {
-    fun create(model: Model): JPanel {
+    fun create(model: Model, placeSearcherListener: PlaceSearcherListener): JPanel {
+        val panel = JPanel(GridLayout(2, 1))
+        panel.add(upperPanel(model, placeSearcherListener))
+        panel.add(JPanel())
+
+        return panel
+    }
+
+    private fun upperPanel(model: Model, placeSearcherListener: PlaceSearcherListener): JPanel {
         val panel = JPanel(GridLayout(4, 1))
         panel.preferredSize = Dimension(100, 1000)
         val startPlace = JTextField()
-        startPlace.addActionListener({ _ -> model.startPlace = startPlace.text })
+        startPlace.addActionListener({ _ -> model.startPlace = placeSearcherListener.findPlace(startPlace.text) })
         val endPlace = JTextField()
-        startPlace.addActionListener({ _ -> model.endPlace = endPlace.text })
+        startPlace.addActionListener({ _ -> model.endPlace = placeSearcherListener.findPlace(endPlace.text) })
         val maxIncline = numberJTextField()
         startPlace.addActionListener({ _ -> model.incline = maxIncline.text.toDouble() })
         val calculate = JButton()
@@ -28,7 +37,6 @@ class OptionsPanelFactory {
         panel.add(createPanelWithElement(endPlace, "Miejsce końcowe"))
         panel.add(createPanelWithElement(maxIncline, "Maksymalne przewyższenie"))
         panel.add(createPanelWithElement(calculate, null))
-
         return panel
     }
 

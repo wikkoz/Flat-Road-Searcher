@@ -1,3 +1,5 @@
 package model
 
-data class Model(var incline: Double = Double.MAX_VALUE, var startPlace: String? = null, var endPlace: String? = null)
+import org.jxmapviewer.viewer.GeoPosition
+
+data class Model(var incline: Double = Double.MAX_VALUE, var startPlace: GeoPosition? = null, var endPlace: GeoPosition? = null)

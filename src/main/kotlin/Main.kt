@@ -1,7 +1,9 @@
+import database.Database
+import main.kotlin.controller.PlaceSearcherListener
 import model.Model
 import view.MainWindow
 
 fun main(args: Array<String>) {
     val model = Model()
-    MainWindow.createAndInit(model)
+    MainWindow.createAndInit(model, PlaceSearcherListener(null))
 }
