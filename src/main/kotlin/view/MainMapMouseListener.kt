@@ -1,6 +1,7 @@
 package main.kotlin.view
 
 import model.Model
+import org.jxmapviewer.JXMapKit
 import org.jxmapviewer.JXMapViewer
 import java.awt.Point
 import java.awt.event.MouseAdapter
@@ -9,14 +10,22 @@ import javax.swing.JMenuItem
 import javax.swing.JPopupMenu
 import javax.swing.SwingUtilities
 
-class MainMapMouseListener(private val mapView: JXMapViewer,private val model: Model) : MouseAdapter() {
+class MainMapMouseListener(private val mapKit: JXMapKit, private val model: Model, private val repaintF: () -> Unit) : MouseAdapter() {
     private val menuBar: JPopupMenu = JPopupMenu()
     private var clickPoint: Point? = null
+
     init {
+        val mapView = mapKit.mainMap
         val beginPlace = JMenuItem("Miejsce początkowe")
-        beginPlace.addActionListener({_ ->model.startPlace = mapView.convertPointToGeoPosition(clickPoint)})
+        beginPlace.addActionListener({
+            model.startPlace = mapView.convertPointToGeoPosition(clickPoint)
+            repaintF()
+        })
         val endPlace = JMenuItem("Miejsce końcowe")
-        endPlace.addActionListener({_ ->model.startPlace = mapView.convertPointToGeoPosition(clickPoint)})
+        endPlace.addActionListener({
+            model.endPlace = mapView.convertPointToGeoPosition(clickPoint)
+            repaintF()
+        })
         menuBar.add(beginPlace)
         menuBar.add(endPlace)
 
@@ -25,7 +34,9 @@ class MainMapMouseListener(private val mapView: JXMapViewer,private val model: M
     override fun mousePressed(e: MouseEvent) {
         clickPoint = e.point
         if (e.isPopupTrigger && SwingUtilities.isRightMouseButton(e)) { //if the event shows the menu
-            menuBar.show(mapView, e.x, e.y); //and show the menu
+            menuBar.show(mapKit.mainMap, e.x, e.y); //and show the menu
         }
     }
+
+
 }

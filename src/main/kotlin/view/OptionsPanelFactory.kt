@@ -12,12 +12,17 @@ import javax.swing.text.NumberFormatter
 import java.text.NumberFormat
 
 
-
 class OptionsPanelFactory {
+
+    lateinit var startPlaceLabel: JLabel
+        private set
+    lateinit var endPlaceLabel: JLabel
+        private set
+
     fun create(model: Model, placeSearcherListener: PlaceSearcherListener): JPanel {
         val panel = JPanel(GridLayout(2, 1))
         panel.add(upperPanel(model, placeSearcherListener))
-        panel.add(JPanel())
+        panel.add(lowerPanel(model))
 
         return panel
     }
@@ -65,5 +70,14 @@ class OptionsPanelFactory {
         // If you want the value to be committed on each keystroke instead of focus lost
         formatter.commitsOnValidEdit = true
         return JFormattedTextField(format)
+    }
+
+    private fun lowerPanel(model: Model): JPanel {
+        val panel = JPanel(GridLayout(4, 1))
+        startPlaceLabel = JLabel(model.startPlace.toString())
+        endPlaceLabel = JLabel(model.endPlace.toString())
+        panel.add(createPanelWithElement(startPlaceLabel, "Miejsce początkowe"))
+        panel.add(createPanelWithElement(endPlaceLabel, "Miejsce końcowe"))
+        return panel
     }
 }
