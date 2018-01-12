@@ -1,43 +1,53 @@
-package view
+package main.kotlin.view
 
 import main.kotlin.controller.PlaceSearcherListener
+import main.kotlin.controller.RoadSearcher
 import model.Model
 import java.awt.BorderLayout
 import java.awt.Component
 import java.awt.Dimension
 import java.awt.GridLayout
-import java.awt.event.ActionListener
+import java.awt.event.FocusEvent
+import java.awt.event.FocusListener
+import java.text.NumberFormat
 import javax.swing.*
 import javax.swing.text.NumberFormatter
-import java.text.NumberFormat
 
 
-class OptionsPanelFactory {
+class OptionsPanelFactory(private val placeSearcherListener: PlaceSearcherListener, private val roadSearcher: RoadSearcher, private val repaintF: () -> Unit) {
 
     lateinit var startPlaceLabel: JLabel
         private set
     lateinit var endPlaceLabel: JLabel
         private set
 
-    fun create(model: Model, placeSearcherListener: PlaceSearcherListener): JPanel {
+    fun create(model: Model): JPanel {
         val panel = JPanel(GridLayout(2, 1))
-        panel.add(upperPanel(model, placeSearcherListener))
+        panel.add(upperPanel(model))
         panel.add(lowerPanel(model))
 
         return panel
     }
 
-    private fun upperPanel(model: Model, placeSearcherListener: PlaceSearcherListener): JPanel {
+    private fun upperPanel(model: Model): JPanel {
         val panel = JPanel(GridLayout(4, 1))
         panel.preferredSize = Dimension(100, 1000)
         val startPlace = JTextField()
-        startPlace.addActionListener({ _ -> model.startPlace = placeSearcherListener.findPlace(startPlace.text) })
+        startPlace.addFocusListener(createFocusListener({
+            model.startPlace = placeSearcherListener.findPlace(startPlace.text)
+            repaintF()
+        }))
         val endPlace = JTextField()
-        startPlace.addActionListener({ _ -> model.endPlace = placeSearcherListener.findPlace(endPlace.text) })
+        endPlace.addFocusListener(createFocusListener({
+            model.endPlace = placeSearcherListener.findPlace(endPlace.text)
+            repaintF()
+        }))
         val maxIncline = numberJTextField()
-        startPlace.addActionListener({ _ -> model.incline = maxIncline.text.toDouble() })
+        maxIncline.text = "0"
+        maxIncline.addFocusListener(createFocusListener({ model.incline = maxIncline.text.toDouble() }))
         val calculate = JButton()
         calculate.text = "Wyznacz trase"
+        calculate.addActionListener({ calculateRoad(model) })
         panel.add(createPanelWithElement(startPlace, "Miejsce początkowe"))
         panel.add(createPanelWithElement(endPlace, "Miejsce końcowe"))
         panel.add(createPanelWithElement(maxIncline, "Maksymalne przewyższenie"))
@@ -46,7 +56,7 @@ class OptionsPanelFactory {
     }
 
     private fun createPanelWithElement(component: Component, text: String?): JPanel {
-        val noRows = if (text?.isBlank() == true) 1 else 2;
+        val noRows = if (text?.isBlank() == true) 1 else 2
         val panel = JPanel(GridLayout(noRows, 1))
 
         if (noRows == 2) {
@@ -57,7 +67,7 @@ class OptionsPanelFactory {
         }
 
         panel.add(component)
-        return panel;
+        return panel
     }
 
     private fun numberJTextField(): JFormattedTextField {
@@ -79,5 +89,27 @@ class OptionsPanelFactory {
         panel.add(createPanelWithElement(startPlaceLabel, "Miejsce początkowe"))
         panel.add(createPanelWithElement(endPlaceLabel, "Miejsce końcowe"))
         return panel
+    }
+
+    private fun calculateRoad(model: Model) {
+        if (model.startPlace == null || model.endPlace == null) {
+            return
+        }
+
+        val track = roadSearcher.searchRoad(model.startPlace!!, model.endPlace!!)
+        model.track.clear()
+        model.track.addAll(track)
+        repaintF()
+    }
+
+    private fun createFocusListener(lostFocus: () -> Unit): FocusListener {
+        return object : FocusListener {
+            override fun focusLost(e: FocusEvent?) {
+                lostFocus()
+            }
+
+            override fun focusGained(e: FocusEvent?) {
+            }
+        }
     }
 }

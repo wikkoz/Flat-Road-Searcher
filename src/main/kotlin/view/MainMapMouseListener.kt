@@ -2,7 +2,6 @@ package main.kotlin.view
 
 import model.Model
 import org.jxmapviewer.JXMapKit
-import org.jxmapviewer.JXMapViewer
 import java.awt.Point
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
@@ -19,12 +18,14 @@ class MainMapMouseListener(private val mapKit: JXMapKit, private val model: Mode
         val beginPlace = JMenuItem("Miejsce początkowe")
         beginPlace.addActionListener({
             model.startPlace = mapView.convertPointToGeoPosition(clickPoint)
+            println(mapView.convertPointToGeoPosition(clickPoint))
             repaintF()
         })
         val endPlace = JMenuItem("Miejsce końcowe")
         endPlace.addActionListener({
             model.endPlace = mapView.convertPointToGeoPosition(clickPoint)
             repaintF()
+            model.track.clear()
         })
         menuBar.add(beginPlace)
         menuBar.add(endPlace)
@@ -34,7 +35,7 @@ class MainMapMouseListener(private val mapKit: JXMapKit, private val model: Mode
     override fun mousePressed(e: MouseEvent) {
         clickPoint = e.point
         if (e.isPopupTrigger && SwingUtilities.isRightMouseButton(e)) { //if the event shows the menu
-            menuBar.show(mapKit.mainMap, e.x, e.y); //and show the menu
+            menuBar.show(mapKit.mainMap, e.x, e.y) //and show the menu
         }
     }
 

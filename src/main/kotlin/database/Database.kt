@@ -1,7 +1,6 @@
-package database
+package main.kotlin.database
 
 import java.sql.Connection
-import java.sql.DriverManager
 import java.sql.ResultSet
 
 
@@ -10,12 +9,12 @@ class Database {
     private var connection: Connection? = null
 
     init {
-        try {
-            val url = "jdbc:postgresql://localhost:5432/osm"
-            connection = DriverManager.getConnection(url, "postgres", "")
-        } catch (e: Exception) {
-            System.err.println(e.message)
-        }
+//        try {
+//            val url = "jdbc:postgresql://localhost:5432/osm"
+//            connection = DriverManager.getConnection(url, "postgres", "")
+//        } catch (e: Exception) {
+//            System.err.println(e.message)
+//        }
 
     }
 

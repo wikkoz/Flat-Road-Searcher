@@ -1,6 +1,6 @@
 package main.kotlin.controller
 
-import database.Database
+import main.kotlin.database.Database
 import org.jxmapviewer.viewer.GeoPosition
 
 class PlaceSearcherListener(private val database: Database?) {

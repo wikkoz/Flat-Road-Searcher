@@ -1,32 +1,18 @@
-package view
+package main.kotlin.view
 
 import org.jxmapviewer.JXMapViewer
+import org.jxmapviewer.painter.Painter
 import org.jxmapviewer.viewer.GeoPosition
 import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.RenderingHints
-import javax.swing.Painter
 
-/**
- * Paints a route
- * @author Martin Steiger
- */
-class RoutePainter
-/**
- * @param track the track
- */
-(track: List<GeoPosition>) : Painter<JXMapViewer> {
+
+class RoutePainter (private val track: MutableList<GeoPosition>) : Painter<JXMapViewer> {
     private val color = Color.RED
     private val antiAlias = true
 
-    private val track: List<GeoPosition>
-
-    init {
-        // copy the list so that changes in the
-        // original list do not have an effect here
-        this.track = ArrayList(track)
-    }
 
     override fun paint(g: Graphics2D, map: JXMapViewer, w: Int, h: Int) {
         var g = g
@@ -54,10 +40,6 @@ class RoutePainter
         g.dispose()
     }
 
-    /**
-     * @param g the graphics object
-     * @param map the map
-     */
     private fun drawRoute(g: Graphics2D, map: JXMapViewer) {
         var lastX = 0
         var lastY = 0
@@ -71,11 +53,11 @@ class RoutePainter
             if (first) {
                 first = false
             } else {
-                g.drawLine(lastX, lastY, pt.x as Int, pt.y as Int)
+                g.drawLine(lastX, lastY, pt.x.toInt(), pt.y.toInt())
             }
 
-            lastX = pt.x as Int
-            lastY = pt.y as Int
+            lastX = pt.x.toInt()
+            lastY = pt.y.toInt()
         }
     }
 }

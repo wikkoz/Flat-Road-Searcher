@@ -1,10 +1,16 @@
-package controller
+package main.kotlin.controller
 
-import database.Database
+import main.kotlin.database.Database
+import org.jxmapviewer.viewer.GeoPosition
+import java.util.*
 
-class RoadSearcher(val database:Database) {
+class RoadSearcher(private val database: Database) {
 
     init {
 
+    }
+
+    fun searchRoad(startPoint: GeoPosition, endPoint: GeoPosition) : List<GeoPosition> {
+        return Arrays.asList<GeoPosition>(startPoint, endPoint)
     }
 }
