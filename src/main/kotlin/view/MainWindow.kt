@@ -26,6 +26,7 @@ class MainWindow(private val model: Model) {
     companion object {
         private val TITLE = "Flat Road Searcher"
         private val WARSAW_POSITION = GeoPosition(52.23, 21.01)
+        private val PORTLAND_POSITION = GeoPosition(45.51, -122.66)
 
         fun createAndInit(model: Model, placeSearcherListener: PlaceSearcherListener, roadSearcher: RoadSearcher): MainWindow {
             val window = MainWindow(model)
@@ -44,9 +45,9 @@ class MainWindow(private val model: Model) {
     private fun init(placeSearcherListener: PlaceSearcherListener, roadSearcher: RoadSearcher) {
         val mainMapListener = MainMapMouseListener(mapKit, model, {repaint()})
 
-        mapKit.addressLocation = WARSAW_POSITION
+        mapKit.addressLocation = PORTLAND_POSITION
         mapKit.defaultProvider = JXMapKit.DefaultProviders.OpenStreetMaps
-        mapKit.centerPosition = WARSAW_POSITION
+        mapKit.centerPosition = PORTLAND_POSITION
         mapKit.setZoom(30000)
         mapKit.mainMap.addMouseListener(mainMapListener)
         addPainter(mapKit.mainMap)

@@ -50,7 +50,7 @@ class OptionsPanelFactory(private val placeSearcherListener: PlaceSearcherListen
         calculate.addActionListener({ calculateRoad(model) })
         panel.add(createPanelWithElement(startPlace, "Miejsce początkowe"))
         panel.add(createPanelWithElement(endPlace, "Miejsce końcowe"))
-        panel.add(createPanelWithElement(maxIncline, "Maksymalne przewyższenie"))
+        panel.add(createPanelWithElement(maxIncline, "Maksymalne nachylenie"))
         panel.add(createPanelWithElement(calculate, null))
         return panel
     }
@@ -96,7 +96,7 @@ class OptionsPanelFactory(private val placeSearcherListener: PlaceSearcherListen
             return
         }
 
-        val track = roadSearcher.searchRoad(model.startPlace!!, model.endPlace!!)
+        val track = roadSearcher.searchRoad(model.startPlace!!, model.endPlace!!, model.incline)
         model.track.clear()
         model.track.addAll(track)
         repaintF()

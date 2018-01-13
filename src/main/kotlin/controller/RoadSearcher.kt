@@ -6,11 +6,9 @@ import java.util.*
 
 class RoadSearcher(private val database: Database) {
 
-    init {
+    val db = database
 
-    }
-
-    fun searchRoad(startPoint: GeoPosition, endPoint: GeoPosition) : List<GeoPosition> {
-        return Arrays.asList<GeoPosition>(startPoint, endPoint)
+    fun searchRoad(startPoint: GeoPosition, endPoint: GeoPosition, incline : Double) : List<GeoPosition> {
+        return database.aStar(startPoint, endPoint, incline)
     }
 }
