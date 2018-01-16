@@ -20,6 +20,12 @@ class OptionsPanelFactory(private val placeSearcherListener: PlaceSearcherListen
         private set
     lateinit var endPlaceLabel: JLabel
         private set
+    lateinit var distance: JLabel
+        private set
+    lateinit var cost: JLabel
+        private set
+    lateinit var elevation: JLabel
+        private set
 
     fun create(model: Model): JPanel {
         val panel = JPanel(GridLayout(2, 1))
@@ -83,11 +89,17 @@ class OptionsPanelFactory(private val placeSearcherListener: PlaceSearcherListen
     }
 
     private fun lowerPanel(model: Model): JPanel {
-        val panel = JPanel(GridLayout(4, 1))
+        val panel = JPanel(GridLayout(5, 1))
         startPlaceLabel = JLabel(model.startPlace.toString())
         endPlaceLabel = JLabel(model.endPlace.toString())
-        panel.add(createPanelWithElement(startPlaceLabel, "Miejsce początkowe"))
-        panel.add(createPanelWithElement(endPlaceLabel, "Miejsce końcowe"))
+        distance = JLabel(model.distance.toString())
+        elevation = JLabel(model.elevation.toString())
+        cost = JLabel(model.cost.toString())
+        panel.add(createPanelWithElement(startPlaceLabel, "Miejsce początkowe:"))
+        panel.add(createPanelWithElement(endPlaceLabel, "Miejsce końcowe:"))
+        panel.add(createPanelWithElement(distance, "Dystans:"))
+        panel.add(createPanelWithElement(elevation, "Przewyższenie:"))
+        panel.add(createPanelWithElement(cost, "Koszt:"))
         return panel
     }
 
@@ -95,7 +107,7 @@ class OptionsPanelFactory(private val placeSearcherListener: PlaceSearcherListen
         if (model.startPlace == null || model.endPlace == null) {
             return
         }
-
+        model.distance = 1.0
         val track = roadSearcher.searchRoad(model.startPlace!!, model.endPlace!!, model.incline)
         model.track.clear()
         model.track.addAll(track)

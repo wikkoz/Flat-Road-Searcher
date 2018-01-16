@@ -41,6 +41,9 @@ class MainWindow(private val model: Model) {
 
     private lateinit var startPlaceLabel: JLabel
     private lateinit var endPlaceLabel: JLabel
+    private lateinit var distance: JLabel
+    private lateinit var elevation: JLabel
+    private lateinit var cost: JLabel
 
     private fun init(placeSearcherListener: PlaceSearcherListener, roadSearcher: RoadSearcher) {
         val mainMapListener = MainMapMouseListener(mapKit, model, {repaint()})
@@ -65,6 +68,9 @@ class MainWindow(private val model: Model) {
         panel.add(factory.create(model), optionsConstraints)
         startPlaceLabel = factory.startPlaceLabel
         endPlaceLabel = factory.endPlaceLabel
+        distance = factory.distance
+        elevation = factory.elevation
+        cost = factory.cost
 
         frame.contentPane.add(panel)
         frame.setSize(900, 600)
@@ -97,5 +103,8 @@ class MainWindow(private val model: Model) {
         panel.repaint()
         startPlaceLabel.text = model.startPlace.toString()
         endPlaceLabel.text = model.endPlace.toString()
+        elevation.text = model.elevation.toString()
+        cost.text = model.cost.toString()
+        distance.text = model.distance.toString()
     }
 }
