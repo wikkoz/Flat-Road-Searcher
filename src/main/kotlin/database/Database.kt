@@ -18,7 +18,7 @@ class Database {
             "ORDER BY seq"
 
     private val GEO_LOCATION_BY_STREET_NAME =
-            "SELECT x1 AS lat, y1 AS lon " +
+            "SELECT x1 AS lon, y1 AS lat " +
             "FROM portland_2po_4pgr " +
             "WHERE osm_name  = ? " +
             "LIMIT 1"
@@ -44,12 +44,12 @@ class Database {
     fun aStar(source : GeoPosition, target : GeoPosition, maxIncline : Double): List<GeoPosition> {
         val aStarStatement = connection!!.prepareStatement(ASTAR_QUERY);
 
-        val roadsStatement = "SELECT id, source, target, cost, x1, y1, x2, y2 FROM portland_2po_4pgr WHERE incline <" + maxIncline
+        val roadsStatement = "SELECT id, source, target, (km * 100 + cost) as cost, x1, y1, x2, y2 FROM portland_2po_4pgr WHERE incline <" + maxIncline
 
-        aStarStatement.setDouble(1, source.latitude)
-        aStarStatement.setDouble(2, source.longitude)
-        aStarStatement.setDouble(3, target.latitude)
-        aStarStatement.setDouble(4, target.longitude)
+        aStarStatement.setDouble(1, source.longitude)
+        aStarStatement.setDouble(2, source.latitude)
+        aStarStatement.setDouble(3, target.longitude)
+        aStarStatement.setDouble(4, target.latitude)
         aStarStatement.setString(5, roadsStatement)
 
         val resultSet = aStarStatement.executeQuery()

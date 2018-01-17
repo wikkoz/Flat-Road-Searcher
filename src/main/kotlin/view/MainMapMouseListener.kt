@@ -18,7 +18,6 @@ class MainMapMouseListener(private val mapKit: JXMapKit, private val model: Mode
         val beginPlace = JMenuItem("Miejsce początkowe")
         beginPlace.addActionListener({
             model.startPlace = mapView.convertPointToGeoPosition(clickPoint)
-            println(mapView.convertPointToGeoPosition(clickPoint))
             repaintF()
         })
         val endPlace = JMenuItem("Miejsce końcowe")
@@ -34,7 +33,7 @@ class MainMapMouseListener(private val mapKit: JXMapKit, private val model: Mode
 
     override fun mousePressed(e: MouseEvent) {
         clickPoint = e.point
-        if (e.isPopupTrigger && SwingUtilities.isRightMouseButton(e)) { //if the event shows the menu
+        if (SwingUtilities.isRightMouseButton(e)) { //if the event shows the menu
             menuBar.show(mapKit.mainMap, e.x, e.y) //and show the menu
         }
     }
